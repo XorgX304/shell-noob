@@ -117,7 +117,7 @@ I'm using zsh so the original example threw me out a little, I made a quick fix.
 for i in $(objdump -d ./bin/shell-code.o -M intel |grep "^ " |cut -f2); do echo -n '\\x'$i; done; echo
 ```
 
-### Attempt 2
+### Final attempt - works!
 
 
 
@@ -128,6 +128,10 @@ nasm -o ./bin/myshellcode.o ./myshellcode.s
 
 Generate Opcode from compiled nasm assembly
 ```
+# create test binary
+gcc -o ./utils/test-asm.c ./bin/test-asm
+
+#export opcodes from binary
 ./bin/test-asm -p ./bin/myshellcode.o
 ```
 

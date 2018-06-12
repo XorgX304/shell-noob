@@ -1,6 +1,15 @@
 ; this demo is from https://gist.githubusercontent.com/Morgawr/9852347/raw/37fafdbfab6684d4fb374c826a2c1bc628cbe2b0/netcat-shellcode.asm
 ; :set ft=masm - handy for intel highlighting in Vim
 
+BITS 32
+
+global _start 
+
+section .text
+
+_start:
+
+
 jmp short       forward
 
 back:
