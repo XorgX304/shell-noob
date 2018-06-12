@@ -117,9 +117,31 @@ I'm using zsh so the original example threw me out a little, I made a quick fix.
 for i in $(objdump -d ./bin/shell-code.o -M intel |grep "^ " |cut -f2); do echo -n '\\x'$i; done; echo
 ```
 
+### Attempt 2
+
+
+
+Compile nasm from written assembly
+```
+nasm -o ./bin/myshellcode.o ./myshellcode.s
+```
+
+Generate Opcode from compiled nasm assembly
+```
+./bin/test-asm -p ./bin/myshellcode.o
+```
+
 ## Placing the Opcode in to a runner 
 
-Lorem ipsum...
+```
+# copy the template
+cp templates/shellcode-runner.c ./runner.c
+
+# drop the opcode in to the template
+
+# compile the runner
+gcc ./runner.c -fno-stack-protector -z execstack -o shellcode
+```
 
 
 [1] https://stackoverflow.com/questions/44914538/execute-reverse-shell-using-execve
@@ -176,6 +198,17 @@ https://stackoverflow.com/questions/16091382/pass-arguments-to-execve-program-in
 https://xorl.wordpress.com/2009/01/04/from-shellcode-to-assembly/
 https://zeltser.com/convert-shellcode-to-assembly/
 https://haiderm.com/convert-hex-assembly-using-simple-python-script/
+
+### Examples of the "Stack Method (push)"
+http://hackoftheday.securitytube.net/2013/04/demystifying-execve-shellcode-stack.html
+https://0day.work/writing-my-first-shellcode-iptables-p-input-accept/
+
+### NASM
+https://ccm.net/faq/1559-compiling-an-assembly-program-with-nasm
+
+### Introductions
+https://www.tutorialspoint.com/assembly_programming/assembly_basic_syntax.htm
+
 
 ### Tools
 https://github.com/reyammer/shellnoob
